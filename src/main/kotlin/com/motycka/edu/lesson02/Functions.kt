@@ -3,28 +3,51 @@ package com.motycka.edu.lesson02
 val coffeeOrders = mutableMapOf<Int, List<String>>()
 
 fun main() {
-    // You can write code here to try the functions
     processOrder(listOf(ESPRESSO, CAPPUCCINO, CAPPUCCINO, AMERICANO), 20.0)
     processOrder(listOf(ESPRESSO, FLAT_WHITE, AMERICANO), 10.0)
-    // processOrder(listOf(ESPRESSO, ESPRESSO, DOUBLE_ESPRESSO), 5.0) // will fail due to insufficient payment
+    // processOrder(listOf(ESPRESSO, ESPRESSO, DOUBLE_ESPRESSO), 5.0) // should fail due to insufficient payment
 }
 
-/* Implement the functions below */
-
 fun processOrder(items: List<String>, payment: Double): Double {
-    val orderId = TODO("call placerOrder(items)")
-    val totalToPay = TODO("call payOrder(orderId)")
+    val orderId = placerOrder(items)
+    val totalToPay = payOrder(orderId)
 
-    val change = TODO("calculate change by subtracting totalToPay from payment")
+    if (payment < totalToPay) {
+        throw IllegalArgumentException("Insufficient payment: $$payment provided, but $$totalToPay required")
+    }
 
-    // TODO call completeOrder(orderId)
+    val change = payment - totalToPay
+    println("Order $orderId completed. Total: $${"%.2f".format(totalToPay)}, Payment: $${"%.2f".format(payment)}, Change: $${"%.2f".format(change)}")
 
+    completeOrder(orderId)
     return change
 }
 
-// TODO Implement placerOrder(items: List<String>): Int
 
-// TODO Implement payOrder(orderId: Int): Double
+fun placerOrder(items: List<String>): Int {
+    val orderId = coffeeOrders.size + 1
+    coffeeOrders[orderId] = items
+    return orderId
+}
 
-// TODO Implement completeOrder(orderId: Int)
+fun payOrder(orderId: Int): Double {
+    val items = coffeeOrders[orderId]
+        ?: throw IllegalArgumentException("Order ID $orderId does not exist")
 
+    var totalPrice = items.sumOf { getPrice(it) }
+
+    if (items.size > 3) {
+        val cheapestItemPrice = items.minOf { getPrice(it) }
+        totalPrice -= cheapestItemPrice
+    }
+
+    return totalPrice
+}
+
+
+fun completeOrder(orderId: Int) {
+    if (!coffeeOrders.containsKey(orderId)) {
+        throw IllegalArgumentException("Order ID $orderId does not exist")
+    }
+    coffeeOrders.remove(orderId)
+}
