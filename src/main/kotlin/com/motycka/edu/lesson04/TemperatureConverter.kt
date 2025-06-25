@@ -14,12 +14,10 @@ object TemperatureConverter {
      *
      * @param fahrenheit temperature value in Fahrenheit
      * @return temperature value in Celsius
-     * @see <a href="https://en.wikipedia.org/wiki/Fahrenheit">Fahrenheit</a>
-     * @see <a href="https://en.wikipedia.org/wiki/Celsius">Celsius</a>
      */
     fun toCelsius(fahrenheit: Double): Double {
-        logger.info { "Converting $fahrenheit Fahrenheit to Celsius" }
-        return (fahrenheit - 32) * 5 / 9
+        logger.info { "Converting $fahrenheit°F to Celsius" }
+        return (fahrenheit - 32) * 5.0 / 9.0
     }
 
     /**
@@ -27,18 +25,14 @@ object TemperatureConverter {
      *
      * @param celsius temperature value in Celsius
      * @return temperature value in Fahrenheit
-     * @see <a href="https://en.wikipedia.org/wiki/Fahrenheit">Fahrenheit</a>
-     * @see <a href="https://en.wikipedia.org/wiki/Celsius">Celsius</a>
      */
     fun toFahrenheit(celsius: Double): Double {
-        logger.info { "Converting $celsius Celsius to Fahrenheit" }
-        return celsius * 9 / 5 + 32
+        logger.info { "Converting $celsius°C to Fahrenheit" }
+        return celsius * 9.0 / 5.0 + 32
     }
-
 }
 
-
 fun main() {
-    TemperatureConverter.toFahrenheit(34.0).also(::println)
-    TemperatureConverter.toCelsius(94.0).also(::println)
+    println("34°C to Fahrenheit: %.2f".format(TemperatureConverter.toFahrenheit(34.0)))
+    println("94°F to Celsius: %.2f".format(TemperatureConverter.toCelsius(94.0)))
 }

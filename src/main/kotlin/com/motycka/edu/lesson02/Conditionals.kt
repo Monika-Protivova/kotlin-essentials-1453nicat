@@ -9,27 +9,21 @@ const val MOCHA_PRICE = 3.6
 const val FLAT_WHITE_PRICE = 3.2
 const val AMERICANO_PRICE = 2.0
 
-
-
 fun conditionals() {
-    val coffeeOrders = mutableMapOf(
-        1 to listOf(ESPRESSO, CAPPUCCINO, LATTE, AMERICANO),
-        2 to listOf(ESPRESSO, DOUBLE_ESPRESSO, FLAT_WHITE)
-    )
+    val coffeeOrders = mutableMapOf<Int, List<String>>()
+    coffeeOrders[1] = listOf(ESPRESSO, CAPPUCCINO)
+    coffeeOrders[2] = listOf(ESPRESSO, DOUBLE_ESPRESSO, FLAT_WHITE)
 
     coffeeOrders.forEach { (orderId, items) ->
         println("Processing Order ID: $orderId")
         println("Items: $items")
-
         val prices = items.map { getPrice(it) }
-
         val discount = if (items.size >= 4) {
             println("You ordered 4 or more coffees, you get 1 for free!")
             prices.minOrNull() ?: 0.0
         } else 0.0
 
         val total = prices.sum() - discount
-
         println("Total price for Order ID $orderId: $total\n")
     }
 }
@@ -47,5 +41,4 @@ fun getPrice(item: String): Double = when (item) {
 }
 
 fun main() {
-    conditionals()
-}
+   conditionals()}
