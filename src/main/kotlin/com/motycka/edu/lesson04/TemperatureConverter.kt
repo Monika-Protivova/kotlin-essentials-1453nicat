@@ -5,9 +5,9 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 private val logger = KotlinLogging.logger { }
 
 /**
- * Utility object for converting temperature values between Fahrenheit and Celsius
+ * Class for converting temperature values between Fahrenheit and Celsius
  */
-object TemperatureConverter {
+class TemperatureConverter {
 
     /**
      * Converts temperature value given in Fahrenheit to Celsius
@@ -30,9 +30,4 @@ object TemperatureConverter {
         logger.info { "Converting $celsius°C to Fahrenheit" }
         return celsius * 9.0 / 5.0 + 32
     }
-}
-
-fun main() {
-    println("34°C to Fahrenheit: %.2f".format(TemperatureConverter.toFahrenheit(34.0)))
-    println("94°F to Celsius: %.2f".format(TemperatureConverter.toCelsius(94.0)))
 }
