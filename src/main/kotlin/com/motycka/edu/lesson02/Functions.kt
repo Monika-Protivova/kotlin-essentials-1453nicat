@@ -1,11 +1,31 @@
 package com.motycka.edu.lesson02
 
-val coffeeOrders = mutableMapOf<Int, List<String>>()
+// Make sure to import prices and names from a shared CoffeeData.kt
 
-fun main() {
-    processOrder(listOf(ESPRESSO, CAPPUCCINO, CAPPUCCINO, AMERICANO), 20.0)
-    processOrder(listOf(ESPRESSO, FLAT_WHITE, AMERICANO), 10.0)
-    // processOrder(listOf(ESPRESSO, ESPRESSO, DOUBLE_ESPRESSO), 5.0) // should fail due to insufficient payment
+val coffeeOrders = mutableMapOf<Int, List<String>>()
+private var nextOrderId = 0
+
+fun placerOrder(items: List<String>): Int {
+    val orderId = nextOrderId
+    coffeeOrders[orderId] = items
+    nextOrderId++
+    return orderId
+}
+
+fun payOrder(orderId: Int): Double {
+    val items = coffeeOrders[orderId] ?: throw IllegalStateException("Order ID $orderId not found.")
+
+    val prices = items.map { getPrice(it) }
+    val discount = if (items.size >= 4) prices.minOrNull() ?: 0.0 else 0.0
+
+    return prices.sum() - discount
+}
+
+fun completeOrder(orderId: Int) {
+    if (!coffeeOrders.containsKey(orderId)) {
+        throw IllegalStateException("Order ID $orderId not found.")
+    }
+    coffeeOrders.remove(orderId)
 }
 
 fun processOrder(items: List<String>, payment: Double): Double {
@@ -13,41 +33,18 @@ fun processOrder(items: List<String>, payment: Double): Double {
     val totalToPay = payOrder(orderId)
 
     if (payment < totalToPay) {
-        throw IllegalArgumentException("Insufficient payment: $$payment provided, but $$totalToPay required")
+        throw IllegalStateException("Insufficient payment. Total to pay is $totalToPay, but received $payment.")
     }
 
     val change = payment - totalToPay
-    println("Order $orderId completed. Total: $${"%.2f".format(totalToPay)}, Payment: $${"%.2f".format(payment)}, Change: $${"%.2f".format(change)}")
+    println("Payment successful. Total paid: $payment, Total to pay: $totalToPay, change: $change")
 
     completeOrder(orderId)
     return change
 }
 
-
-fun placerOrder(items: List<String>): Int {
-    val orderId = coffeeOrders.size + 1
-    coffeeOrders[orderId] = items
-    return orderId
-}
-
-fun payOrder(orderId: Int): Double {
-    val items = coffeeOrders[orderId]
-        ?: throw IllegalArgumentException("Order ID $orderId does not exist")
-
-    var totalPrice = items.sumOf { getPrice(it) }
-
-    if (items.size > 3) {
-        val cheapestItemPrice = items.minOf { getPrice(it) }
-        totalPrice -= cheapestItemPrice
-    }
-
-    return totalPrice
-}
-
-
-fun completeOrder(orderId: Int) {
-    if (!coffeeOrders.containsKey(orderId)) {
-        throw IllegalArgumentException("Order ID $orderId does not exist")
-    }
-    coffeeOrders.remove(orderId)
+fun main() {
+    processOrder(listOf(ESPRESSO, CAPPUCCINO, CAPPUCCINO, AMERICANO), 20.0)
+    processOrder(listOf(ESPRESSO, FLAT_WHITE, AMERICANO), 10.0)
+    // processOrder(listOf(ESPRESSO, ESPRESSO, DOUBLE_ESPRESSO), 5.0) // should fail due to insufficient payment
 }
