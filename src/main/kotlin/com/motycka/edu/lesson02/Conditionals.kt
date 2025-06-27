@@ -1,9 +1,10 @@
 package com.motycka.edu.lesson02
 
 fun conditionals() {
-    val coffeeOrders = mutableMapOf<Int, List<String>>()
-    coffeeOrders[1] = listOf(ESPRESSO, CAPPUCCINO, LATTE, AMERICANO)  // 4 items in order 1
-    coffeeOrders[2] = listOf(ESPRESSO, DOUBLE_ESPRESSO, FLAT_WHITE)   // 3 items in order 2
+    val coffeeOrders = mapOf(
+        1 to listOf(ESPRESSO, CAPPUCCINO, LATTE, AMERICANO),
+        2 to listOf(ESPRESSO, DOUBLE_ESPRESSO, FLAT_WHITE)
+    )
 
     coffeeOrders.forEach { (orderId, items) ->
         println("Processing Order ID: $orderId")
@@ -19,23 +20,23 @@ fun conditionals() {
         }
 
         val total = prices.sum() - discount
-
-        // Format the total price to 2 decimal places
-        println("Total price for Order ID $orderId: %.2f".format(total))
-        println()  // blank line to separate orders
+        println("Total price for Order ID $orderId: $total") // Print total without formatting
+        println()
     }
 }
 
-fun getPrice(item: String): Double = when (item) {
-    ESPRESSO -> ESPRESSO_PRICE
-    DOUBLE_ESPRESSO -> DOUBLE_ESPRESSO_PRICE
-    CAPPUCCINO -> CAPPUCCINO_PRICE
-    LATTE -> LATTE_PRICE
-    MACCHIATO -> MACCHIATO_PRICE
-    MOCHA -> MOCHA_PRICE
-    FLAT_WHITE -> FLAT_WHITE_PRICE
-    AMERICANO -> AMERICANO_PRICE
-    else -> error("Item not on menu: $item")
+fun getPrice(item: String): Double {
+    return when (item) {
+        ESPRESSO -> ESPRESSO_PRICE
+        DOUBLE_ESPRESSO -> DOUBLE_ESPRESSO_PRICE
+        CAPPUCCINO -> CAPPUCCINO_PRICE
+        LATTE -> LATTE_PRICE
+        MACCHIATO -> MACCHIATO_PRICE
+        MOCHA -> MOCHA_PRICE
+        FLAT_WHITE -> FLAT_WHITE_PRICE
+        AMERICANO -> AMERICANO_PRICE
+        else -> throw IllegalArgumentException("Unknown coffee type: $item")
+    }
 }
 
 fun main() {

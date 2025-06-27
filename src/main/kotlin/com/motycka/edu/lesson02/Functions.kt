@@ -5,6 +5,7 @@ package com.motycka.edu.lesson02
 val coffeeOrders = mutableMapOf<Int, List<String>>()
 private var nextOrderId = 0
 
+
 fun placerOrder(items: List<String>): Int {
     val orderId = nextOrderId
     coffeeOrders[orderId] = items
